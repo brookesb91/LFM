@@ -20,6 +20,7 @@
     "GetPlayerLink",
     "class",
     "RAID",
-    "GetQuestDifficultyColor"
+    "GetQuestDifficultyColor",
+    "SlashCmdList"
   ]
 }

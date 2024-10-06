@@ -21,14 +21,15 @@ local instances = {
   { name = "Blackrock Depths",              matches = { "brd" } },
   { name = "Lower Blackrock Spire",         matches = { "lbrs" } },
   { name = "Upper Blackrock Spire",         matches = { "ubrs" } },
-  { name = "Dire Maul - East",              matches = { "dm east", "dme" } },
-  { name = "Dire Maul - West",              matches = { "dm west", "dmw" } },
-  { name = "Dire Maul - North",             matches = { "dm north", "dmn" } },
-  { name = "Stratholme",                    matches = { "strat" } },
+  { name = "Dire Maul - East",              matches = { "dire maul east", "dm east", "dme" } },
+  { name = "Dire Maul - West",              matches = { "dire maul west", "dm west", "dmw" } },
+  { name = "Dire Maul - North",             matches = { "dire maul north", "dm north", "dmn", "dmt", "tribute" } },
+  { name = "Stratholme",                    matches = { "strat", "strath" } },
   { name = "Scholomance",                   matches = { "scholo" } },
   { name = "Demon Fall Canyon",             matches = { "dfc" } },
+  { name = "Crystal Vale",                  matches = { "thunderaan", "prince" } },
   { name = "Molten Core",                   matches = { "mc" } },
-  { name = "Onyxia's Lair",                 matches = { "ony" } },
+  { name = "Onyxia's Lair",                 matches = { "ony", "onyxia" } },
   { name = "Blackwing Lair",                matches = { "bwl" } },
   { name = "Zul'Gurub",                     matches = { "zg" } },
   { name = "Ruins of Ahn'Qiraj",            matches = { "aq20" } },
@@ -37,12 +38,32 @@ local instances = {
 }
 
 local roles = {
-  { name = "Tank",   matches = { "tank", "tanks" },                      color = "FF4D85E6" },
-  { name = "Healer", matches = { "heal", "healer", "healers", "heals" }, color = "FF85FF85" },
-  { name = "DPS",    matches = { "dps", "dd", "rdps" },                  color = "FFFF6B6B" }
+  { name = "Tank",   matches = { "tank", "tanks" },                      color = "FF4D85E6", icon = "Interface\\Icons\\INV_Shield_06" },
+  { name = "Healer", matches = { "heal", "healer", "healers", "heals" }, color = "FF85FF85", icon = "Interface\\Icons\\Spell_Holy_Heal02" },
+  { name = "DPS",    matches = { "dps", "dd", "rdps" },                  color = "FFFF6B6B", icon = "Interface\\Icons\\INV_Sword_39" }
 }
 
-LFM:RegisterEvent("CHAT_MSG_CHANNEL")
+local enabled = false
+
+local function enable()
+  if enabled then
+    return
+  end
+
+  enabled = true
+  LFM:RegisterEvent("CHAT_MSG_CHANNEL")
+  DEFAULT_CHAT_FRAME:AddMessage("|cFF00FF00LFM enabled")
+end
+
+local function disable()
+  if not enabled then
+    return
+  end
+
+  enabled = false
+  LFM:UnregisterEvent("CHAT_MSG_CHANNEL")
+  DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000LFM disabled")
+end
 
 LFM:SetScript("OnEvent", function(self, event, ...)
   if event == "CHAT_MSG_CHANNEL" then
@@ -77,7 +98,8 @@ LFM:SetScript("OnEvent", function(self, event, ...)
     for _, entry in ipairs(roles) do
       for _, match in ipairs(entry.matches) do
         if text:match(match) then
-          notification = notification .. " |c" .. entry.color .. "[" .. entry.name .. "]"
+          notification = notification ..
+              " |c" .. entry.color .. "[|T" .. entry.icon .. ":14|t " .. entry.name .. "]"
           break
         end
       end
@@ -86,3 +108,13 @@ LFM:SetScript("OnEvent", function(self, event, ...)
     DEFAULT_CHAT_FRAME:AddMessage(notification)
   end
 end)
+
+SLASH_LFM1 = "/lfm"
+
+SlashCmdList["LFM"] = function(msg)
+  if enabled then
+    disable()
+  else
+    enable()
+  end
+end
