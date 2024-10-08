@@ -1,7 +1,7 @@
 ## Interface: 11403
 ## Title: LFM
 ## Notes: Cleaner LFM messages.
-## Version: 1.0.1
+## Version: 1.0.2
 ## Author: Ben Brookes
 ## DefaultState: Enabled
 

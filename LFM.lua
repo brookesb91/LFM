@@ -43,6 +43,29 @@ local roles = {
   { name = "DPS",    matches = { "dps", "dd", "rdps" },                  color = "FFFF6B6B", icon = "Interface\\Icons\\INV_Sword_39" }
 }
 
+local class_icons = {
+  ["druid"] = "Interface\\Icons\\ClassIcon_Druid",
+  ["hunter"] = "Interface\\Icons\\ClassIcon_Hunter",
+  ["mage"] = "Interface\\Icons\\ClassIcon_Mage",
+  ["paladin"] = "Interface\\Icons\\ClassIcon_Paladin",
+  ["priest"] = "Interface\\Icons\\ClassIcon_Priest",
+  ["rogue"] = "Interface\\Icons\\ClassIcon_Rogue",
+  ["shaman"] = "Interface\\Icons\\ClassIcon_Shaman",
+  ["warlock"] = "Interface\\Icons\\ClassIcon_Warlock",
+  ["warrior"] = "Interface\\Icons\\ClassIcon_Warrior"
+}
+
+local race_icons = {
+  ["human"] = "Interface\\Icons\\INV_Misc_Head_Human_01",
+  ["dwarf"] = "Interface\\Icons\\INV_Misc_Head_Dwarf_01",
+  ["night elf"] = "Interface\\Icons\\INV_Misc_Head_Elf_02",
+  ["gnome"] = "Interface\\Icons\\INV_Misc_Head_Gnome_01",
+  ["orc"] = "Interface\\Icons\\INV_Misc_Head_Orc_01",
+  ["undead"] = "Interface\\Icons\\INV_Misc_Head_Undead_01",
+  ["tauren"] = "Interface\\Icons\\INV_Misc_Head_Tauren_01",
+  ["troll"] = "Interface\\Icons\\INV_Misc_Head_Troll_01"
+}
+
 local enabled = false
 
 local function enable()
@@ -68,6 +91,7 @@ end
 LFM:SetScript("OnEvent", function(self, event, ...)
   if event == "CHAT_MSG_CHANNEL" then
     local message, player = ...
+    local guid = select(12, ...)
     local text = string.lower(message)
     local notification = "|cFFFF80FF|Hplayer:" .. player .. "|h[" .. player .. "]|h"
 
@@ -104,6 +128,10 @@ LFM:SetScript("OnEvent", function(self, event, ...)
         end
       end
     end
+
+    local class, _, race = GetPlayerInfoByGUID(guid)
+
+    notification = "|T" .. race_icons[race:lower()] .. ":14|t|T" .. class_icons[class:lower()] .. ":14|t" .. notification
 
     DEFAULT_CHAT_FRAME:AddMessage(notification)
   end
