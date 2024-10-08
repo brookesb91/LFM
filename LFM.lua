@@ -40,7 +40,7 @@ local instances = {
 local roles = {
   { name = "Tank",   matches = { "tank", "tanks" },                      color = "FF4D85E6", icon = "Interface\\Icons\\INV_Shield_06" },
   { name = "Healer", matches = { "heal", "healer", "healers", "heals" }, color = "FF85FF85", icon = "Interface\\Icons\\Spell_Holy_Heal02" },
-  { name = "DPS",    matches = { "dps", "dd", "rdps" },                  color = "FFFF6B6B", icon = "Interface\\Icons\\INV_Sword_39" }
+  { name = "Damage", matches = { "dps", "dd", "rdps" },                  color = "FFFF6B6B", icon = "Interface\\Icons\\INV_Sword_39" }
 }
 
 local class_icons = {
@@ -95,7 +95,7 @@ LFM:SetScript("OnEvent", function(self, event, ...)
     local text = string.lower(message)
     local notification = "|cFFFF80FF|Hplayer:" .. player .. "|h[" .. player .. "]|h"
 
-    if text:match("lf(%d?)m") then
+    if text:match("lf%d?m") then
       notification = notification .. " |cFF40C040LFM"
     elseif text:match("lfg") then
       notification = notification .. " |cFF8080FFLFG"
